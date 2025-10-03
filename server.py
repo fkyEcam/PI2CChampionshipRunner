@@ -12,7 +12,7 @@ from utils import get_ip
 log = getLogger("server")
 
 
-async def main(gameName: str, port: int, tempo: float, parall: bool):
+async def main(gameName: str, port: int, tempo: float, parall: bool, ui_enabled: bool):
     log.info("Game Server For {}".format(gameName.capitalize()))
     IPAddr = get_ip()
 
@@ -23,9 +23,12 @@ async def main(gameName: str, port: int, tempo: float, parall: bool):
     stateDumperTask = asyncio.create_task(dumpState())
     rescuerTask = asyncio.create_task(rescuer())
     matchAwaiterTask = asyncio.create_task(matchAwaiter())
-
-    await ui(gameName, render, IPAddr, port)
-
+    if ui_enabled:
+        await ui(gameName, render, IPAddr, port)
+    else:
+        log.info("UI disabled, server running in background")
+        while True:
+            await asyncio.sleep(1)
     inscriptionTask.cancel()
     try:
         await inscriptionTask
@@ -68,6 +71,12 @@ if __name__ == "__main__":
         default=3000,
     )
     parser.add_argument(
+        "--ui",
+        action=argparse.BooleanOptionalAction,
+        help="If the ui should be launched",
+        default=True,
+    )
+    parser.add_argument(
         "-t",
         "--tempo",
         type=float,
@@ -82,4 +91,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    asyncio.run(main(args.gameName, args.port, args.tempo, args.parall))
+    asyncio.run(main(args.gameName, args.port, args.tempo, args.parall, args.ui))

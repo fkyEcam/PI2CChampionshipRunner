@@ -105,7 +105,7 @@ async def ui(gameName, render, ip, port):
     window = impl_glfw_init("{} Runner".format(gameName.capitalize()))
     impl = GlfwRenderer(window)
     io = imgui.get_io()
-    io.font_global_scale = SCALE_FACTOR
+#    io.font_global_scale = SCALE_FACTOR
     imgui.get_style().scale_all_sizes(SCALE_FACTOR)
 
     def print_key_value(key, value):
