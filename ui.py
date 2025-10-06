@@ -2,7 +2,7 @@ import time
 
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 import glfw
-from imgui_bundle import imgui
+from imgui_bundle import ImVec2, imgui 
 import OpenGL.GL as gl
 import json
 
@@ -105,7 +105,7 @@ async def ui(gameName, render, ip, port):
     window = impl_glfw_init("{} Runner".format(gameName.capitalize()))
     impl = GlfwRenderer(window)
     io = imgui.get_io()
-#    io.font_global_scale = SCALE_FACTOR
+    # io.font_global_scale = SCALE_FACTOR
     imgui.get_style().scale_all_sizes(SCALE_FACTOR)
 
     def print_key_value(key, value):
@@ -225,11 +225,9 @@ async def ui(gameName, render, ip, port):
                 texture, _, _ = createTextureFromPIL(render(match.state, 300))
                 imgui.image(
                     texture,
-                    (150 * SCALE_FACTOR, 150 * SCALE_FACTOR),
-                    (0, 0),
-                    (1, 1),
-                    (255, 255, 255, 255),
-                    (255, 255, 255, 128),
+                    ImVec2(150 * SCALE_FACTOR, 150 * SCALE_FACTOR),
+                    ImVec2(0, 0),
+                    ImVec2(1, 1)
                 )
                 imgui.end_group()
                 if match.chat is not None:
